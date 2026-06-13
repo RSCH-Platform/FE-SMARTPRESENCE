@@ -31,7 +31,7 @@ function fixUrl(url: string | null | undefined) {
   if (url.startsWith('data:')) return url;
   try {
     const parsed = new URL(url);
-    if (parsed.port === '7104' || (parsed.hostname === 'localhost' && parsed.port === '8000')) {
+    if (parsed.port === '7104' || parsed.port === '7200' || parsed.port === '9090' ||(parsed.hostname === 'localhost' && parsed.port === '8000')) {
       return parsed.pathname;
     }
   } catch {
@@ -43,8 +43,8 @@ function fixUrl(url: string | null | undefined) {
 function sanitizeHtml(html: string | null | undefined) {
   if (!html) return '';
   return html
-    .replaceAll('http://localhost:7104/smartpresence', '/smartpresence')
-    .replaceAll('http://localhost:8000/storage', '/storage');
+    .replaceAll('http://localhost:9090/smsp', '/smsp')
+    .replaceAll('http://localhost:7200/storage', '/storage');
 }
 
 /* Custom Searchable Select */
