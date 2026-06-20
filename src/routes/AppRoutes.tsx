@@ -15,6 +15,7 @@ const MeetingManagement = lazy(() => import('../pages/meetings/MeetingManagement
 const MeetingForm = lazy(() => import('../pages/meetings/MeetingForm'));
 const MeetingDetail = lazy(() => import('../pages/meetings/MeetingDetail'));
 const WorkUnitManagement = lazy(() => import('../pages/work-units/WorkUnitManagement'));
+const EmployeeTypeManagement = lazy(() => import('../pages/employee-types/EmployeeTypeManagement'));
 const LaporanRapat = lazy(() => import('../pages/laporan/LaporanRapat'));
 const LaporanDetail = lazy(() => import('../pages/laporan/LaporanDetail'));
 const BackupManagement = lazy(() => import('../pages/backups/BackupManagement'));
@@ -69,6 +70,7 @@ export default function AppRoutes() {
               <Route path="/rooms" element={<RoomManagement />} />
               <Route path="/users" element={<UserManagement />} />
               <Route path="/work-units" element={<WorkUnitManagement />} />
+              <Route path="/employee-types" element={<EmployeeTypeManagement />} />
               <Route path="/backups" element={<BackupManagement />} />
               <Route path="/ubah-logo" element={<UbahLogo />} />
             </Route>

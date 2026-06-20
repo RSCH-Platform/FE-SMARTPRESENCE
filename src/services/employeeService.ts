@@ -93,3 +93,25 @@ export const workUnitService = {
     await api.delete(`/work-unit/${id}`);
   },
 };
+
+export const employeeTypeManageService = {
+  /* List paginated untuk halaman manajemen (dengan employees_count) */
+  async listPaginated(params?: Record<string, string | number>): Promise<{ data: PaginatedResponse<EmployeeType & { employees_count?: number }> }> {
+    const res = await api.get("/employee-types-manage", { params });
+    return res.data;
+  },
+
+  async store(data: { employee_type: string }): Promise<EmployeeType> {
+    const res = await api.post("/employee-type", data);
+    return res.data.data;
+  },
+
+  async update(id: number, data: { employee_type: string }): Promise<EmployeeType> {
+    const res = await api.patch(`/employee-type/${id}`, data);
+    return res.data.data;
+  },
+
+  async destroy(id: number): Promise<void> {
+    await api.delete(`/employee-type/${id}`);
+  },
+};
