@@ -311,24 +311,7 @@
   padding-right: 0.25rem;
 }
 
-/* Custom scrollbar for participant list */
-.participant-list::-webkit-scrollbar {
-  width: 6px;
-}
 
-.participant-list::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 3px;
-}
-
-.participant-list::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 3px;
-}
-
-.participant-list::-webkit-scrollbar-thumb:hover {
-  background: var(--text-light);
-}
 
 .participant-item {
   display: flex;
