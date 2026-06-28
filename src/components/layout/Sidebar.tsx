@@ -105,6 +105,15 @@ const menuItems: MenuItem[] = [
     ),
     roles: [ROLE_SUPER_ADMIN],
   },
+  {
+    label: 'Profil',
+    path: '/profile',
+    iconNode: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="sidebar-menu-icon" style={{ width: '22px', height: '22px' }}>
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+      </svg>
+    ),
+  },
 ];
 
 interface SidebarProps {
@@ -167,7 +176,7 @@ export default function Sidebar({ mobileOpen, onToggleMobile }: SidebarProps) {
             <img src={logoKiriSidebar || sidebarLogo} alt="Logo RS Citra Husada" width="57" height="57" />
           </div>
           <div className="sidebar-brand-text">
-            <h2>RSCH</h2>
+            <h2>RS Citra Husada</h2>
             <p>Smart Presence</p>
           </div>
         </div>

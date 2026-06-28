@@ -20,6 +20,7 @@ const LaporanRapat = lazy(() => import('../pages/laporan/LaporanRapat'));
 const LaporanDetail = lazy(() => import('../pages/laporan/LaporanDetail'));
 const BackupManagement = lazy(() => import('../pages/backups/BackupManagement'));
 const UbahLogo = lazy(() => import('../pages/settings/UbahLogo'));
+const Profile = lazy(() => import('../pages/profile/Profile'));
 
 /* ─── Role constants ─── */
 const ROLE_SUPER_ADMIN = 1;
@@ -57,6 +58,7 @@ export default function AppRoutes() {
             <Route path="/meetings/create" element={<MeetingForm />} />
             <Route path="/meetings/:id" element={<MeetingDetail />} />
             <Route path="/meetings/:id/edit" element={<MeetingForm />} />
+            <Route path="/profile" element={<Profile />} />
 
             {/* Laporan – SuperAdmin + Sekretaris */}
             <Route element={<RoleProtectedRoute allowedRoles={[ROLE_SUPER_ADMIN, ROLE_SEKRETARIS]} />}>
