@@ -3,7 +3,8 @@ import { useAuthStore } from '../../store/authStore';
 import { userService } from '../../services/userService';
 import { employeeService } from '../../services/employeeService';
 import { useToast } from '../../contexts/ToastContext';
-import type { Employee } from '../../types/employee';
+import { type Employee } from '../../types/employee';
+import { getUserRoleId } from '../../types/user';
 import './Profile.css';
 
 export default function Profile() {
@@ -112,8 +113,9 @@ export default function Profile() {
     }
   };
 
-  const roleName = user?.role_id === 1 ? 'Super Admin' : user?.role_id === 3 ? 'Sekretaris' : 'Karyawan';
-  const roleClass = user?.role_id === 1 ? 'admin' : user?.role_id === 3 ? 'sekretaris' : 'karyawan';
+  const userRoleId = getUserRoleId(user);
+  const roleName = userRoleId === 1 ? 'Super Admin' : userRoleId === 3 ? 'Sekretaris' : 'Karyawan';
+  const roleClass = userRoleId === 1 ? 'admin' : userRoleId === 3 ? 'sekretaris' : 'karyawan';
 
   return (
     <div className="profile-container">

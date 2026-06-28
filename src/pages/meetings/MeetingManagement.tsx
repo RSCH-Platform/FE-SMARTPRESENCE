@@ -5,7 +5,8 @@ import {
   meetingService,
   meetingRoomService,
 } from "../../services/meetingService";
-import { useAuthStore } from "../../store/authStore";
+import { useAuthStore } from '../../store/authStore';
+import { getUserRoleId } from '../../types/user';
 import { useToast } from "../../contexts/ToastContext";
 import type {
   Meeting,
@@ -43,7 +44,7 @@ function statusLabel(s: string) {
 export default function MeetingManagement() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const isAdmin = user?.role_id === ROLE_ADMIN;
+  const isAdmin = getUserRoleId(user) === ROLE_ADMIN;
 
   /* state */
   const [meetings, setMeetings] = useState<PaginatedResponse<Meeting> | null>(

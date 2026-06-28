@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import ActionIcon from '../../components/ui/ActionIcon';
 import { userService } from '../../services/userService';
 import type { User, Role, PaginatedUsersResponse, UserFormData } from '../../types/user';
+import { getUserRoleId } from '../../types/user';
 import { useToast } from '../../contexts/ToastContext';
 import './UserManagement.css';
 
@@ -41,7 +42,7 @@ export default function UserManagement() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   /* Form State */
-  const [formData, setFormData] = useState<UserFormData>({ name: '', nip: '', password: '', role_id: '' });
+  const [formData, setFormData] = useState<UserFormData>({ name: '', nip: '', password: '', roles: [] });
   const [formErrors, setFormErrors] = useState<Record<string, string[]>>({});
   const [saving, setSaving] = useState(false);
 
@@ -79,14 +80,14 @@ export default function UserManagement() {
   /* Modal Handlers */
   const openAddModal = () => {
     setSelectedUser(null);
-    setFormData({ name: '', nip: '', password: '', role_id: '' });
+    setFormData({ name: '', nip: '', password: '', roles: [] });
     setFormErrors({});
     setShowFormModal(true);
   };
 
   const openEditModal = (user: User) => {
     setSelectedUser(user);
-    setFormData({ name: user.name, nip: user.nip, password: '', role_id: user.role_id });
+    setFormData({ name: user.name, nip: user.nip, password: '', roles: user.roles?.map(r => r.id) || [] });
     setFormErrors({});
     setShowFormModal(true);
   };
@@ -207,7 +208,8 @@ export default function UserManagement() {
               </thead>
               <tbody>
                 {users.data.map(u => {
-                  const isSuperAdmin = u.role_id === 1;
+                  const userRole = getUserRoleId(u);
+                  const isSuperAdmin = userRole === 1;
                   return (
                     <tr key={u.id}>
                       <td>
@@ -221,10 +223,9 @@ export default function UserManagement() {
                           </div>
                         </div>
                       </td>
-                      <td>
-                        <span className={`role-badge ${getRoleClass(u.role?.role || '')}`}>
-                          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
-                          {u.role?.role || '-'}
+                      <td className="text-center">
+                        <span className={`role-badge ${getRoleClass(u.roles?.[0]?.role || '')}`}>
+                          {u.roles?.[0]?.role || '-'}
                         </span>
                       </td>
                       <td>{formatDate(u.created_at)}</td>
@@ -335,8 +336,8 @@ export default function UserManagement() {
                   <div className="modal-field">
                     <label>Role <span className="required">*</span></label>
                     <select
-                      value={formData.role_id}
-                      onChange={e => setFormData({ ...formData, role_id: Number(e.target.value) })}
+                      value={formData.roles[0] || ''}
+                      onChange={e => setFormData({ ...formData, roles: [Number(e.target.value)] })}
                       required
                     >
                       <option value="" disabled>Pilih Role</option>
@@ -344,7 +345,7 @@ export default function UserManagement() {
                         <option key={r.id} value={r.id}>{r.role}</option>
                       ))}
                     </select>
-                    {formErrors.role_id && <div className="modal-field-error">{formErrors.role_id[0]}</div>}
+                    {formErrors.roles && <div className="modal-field-error">{formErrors.roles[0]}</div>}
                   </div>
                 )}
               </div>

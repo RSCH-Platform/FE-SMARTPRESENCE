@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, Routes, Route } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
+import { getUserRoleId } from '../types/user';
 
 // Eager load Login and Layout as they are critical path
 import Login from '../pages/auth/Login';
@@ -42,7 +43,8 @@ function ProtectedRoute() {
 
 function RoleProtectedRoute({ allowedRoles }: { allowedRoles: number[] }) {
   const { user } = useAuthStore();
-  if (!user || !allowedRoles.includes(user.role_id)) return <Navigate to="/dashboard" replace />;
+  const userRoleId = getUserRoleId(user);
+  if (!user || userRoleId === undefined || !allowedRoles.includes(userRoleId)) return <Navigate to="/dashboard" replace />;
   return <Outlet />;
 }
 

@@ -6,6 +6,7 @@ import { laporanService } from '../../services/laporanService';
 import { employeeService } from '../../services/employeeService';
 import type { Employee } from '../../types/employee';
 import { useAuthStore } from '../../store/authStore';
+import { getUserRoleId } from '../../types/user';
 import { useLogo } from '../../contexts/LogoContext';
 import './LaporanDetail.css';
 
@@ -95,7 +96,7 @@ export default function LaporanDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const isSuperAdmin = user?.role_id === 1;
+  const isSuperAdmin = getUserRoleId(user) === 1;
   const editorRef = useRef<any>(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DetailData | null>(null);

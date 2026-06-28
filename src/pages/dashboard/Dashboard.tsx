@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import { useAuthStore } from '../../store/authStore';
+import { getUserRoleId } from '../../types/user';
 import DashboardSekretaris from './DashboardSekretaris';
 import './Dashboard.css';
 
@@ -119,7 +120,8 @@ import iconRapatSelesai from '../../assets/icons/dashboard/rapat selesai.webp';
 /* ─── Component ─── */
 export default function Dashboard() {
   const { user } = useAuthStore();
-  if (user?.role_id === 3) return <DashboardSekretaris />;
+  const userRoleId = getUserRoleId(user);
+  if (userRoleId === 3) return <DashboardSekretaris />;
 
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);

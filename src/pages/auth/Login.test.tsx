@@ -1,6 +1,7 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
-import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import type { Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import Login from './Login';
 import { useAuthStore } from '../../store/authStore';
@@ -100,7 +101,7 @@ describe('Login Component', () => {
   it('successfully logs in and redirects', async () => {
     const mockResponse = {
       token: 'fake-token',
-      user: { id: 1, name: 'John Doe', nip: '123456', role_id: 2 }
+      user: { id: 1, name: 'John Doe', nip: '123456', roles: [{ id: 2, role: 'Admin Utama' }], created_at: '', updated_at: '' }
     };
     (authService.login as Mock).mockResolvedValueOnce(mockResponse);
 

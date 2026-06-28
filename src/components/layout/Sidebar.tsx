@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
+import { getUserRoleId } from '../../types/user';
 import { authService } from '../../services/authService';
 import { useTheme } from '../../hooks/useTheme';
 import { useLogo } from '../../contexts/LogoContext';
@@ -128,7 +129,7 @@ export default function Sidebar({ mobileOpen, onToggleMobile }: SidebarProps) {
   const { isDark, toggleTheme } = useTheme();
   const { logoKiriSidebar } = useLogo();
 
-  const userRoleId = user?.role_id;
+  const userRoleId = getUserRoleId(user);
 
   // Filter menu items based on user's role
   const visibleMenuItems = menuItems.filter((item) => {
