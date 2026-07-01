@@ -314,12 +314,13 @@ const QUOTES: string[] = [
 ];
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState('');
+  const [nip, setNip] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [quoteIndex, setQuoteIndex] = useState(() => Math.floor(Math.random() * QUOTES.length));
   const [isFading, setIsFading] = useState(false);
+  const [checkingSSO, setCheckingSSO] = useState(true);
 
   const navigate = useNavigate();
   const auth = useAuthStore();
@@ -330,6 +331,23 @@ const Login: React.FC = () => {
     navigate('/dashboard', { replace: true });
     return null;
   }
+
+  // Handle SSO Redirect
+  useEffect(() => {
+    const checkSSOMode = async () => {
+      try {
+        const data = await authService.getAuthMode();
+        if (data.sso_enabled && data.sso_login_url) {
+          window.location.href = data.sso_login_url;
+        } else {
+          setCheckingSSO(false);
+        }
+      } catch (err) {
+        setCheckingSSO(false);
+      }
+    };
+    checkSSOMode();
+  }, []);
 
   // Rotate quotes every 6 seconds
   useEffect(() => {
@@ -349,7 +367,7 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await authService.login({ username, password });
+      const response = await authService.login({ nip, password });
       auth.login(response.token, response.user);
       navigate('/dashboard', { replace: true });
     } catch (err: unknown) {
@@ -363,6 +381,14 @@ const Login: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  if (checkingSSO) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-body)' }}>
+        <div className="spinner"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="login-container">
@@ -385,15 +411,15 @@ const Login: React.FC = () => {
 
         <form className="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="nip">NIP</label>
             <div className="input-wrapper">
               <img src={userIcon} alt="user icon" className="input-icon" />
               <input
                 type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Masukkan username"
+                id="nip"
+                value={nip}
+                onChange={(e) => setNip(e.target.value)}
+                placeholder="Masukkan NIP"
                 required
                 disabled={isLoading}
               />

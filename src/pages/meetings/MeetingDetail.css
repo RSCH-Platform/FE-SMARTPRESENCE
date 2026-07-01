@@ -154,24 +154,7 @@
   padding-right: 0.25rem;
 }
 
-/* Custom scrollbar for attendance list */
-.attendance-list::-webkit-scrollbar {
-  width: 6px;
-}
 
-.attendance-list::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 3px;
-}
-
-.attendance-list::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 3px;
-}
-
-.attendance-list::-webkit-scrollbar-thumb:hover {
-  background: var(--text-light);
-}
 
 /* ─── Attendance Search ─── */
 .attendance-search-wrapper {

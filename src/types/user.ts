@@ -1,5 +1,5 @@
 export interface LoginRequest {
-  username?: string;
+  nip?: string;
   password?: string;
 }
 
@@ -15,17 +15,24 @@ export interface Role {
 
 export interface User {
   id: number;
-  username: string;
-  role_id: number;
+  name: string;
+  nip: string;
+  roles?: Role[];
   created_at: string;
   updated_at: string;
-  role?: Role;
+}
+
+export function getUserRoleId(user: User | null | undefined): number | undefined {
+  if (!user) return undefined;
+  if (user.roles && user.roles.length > 0) return user.roles[0].id;
+  return undefined;
 }
 
 export interface UserFormData {
-  username: string;
+  name: string;
+  nip: string;
   password?: string;
-  role_id: number | '';
+  roles: number[];
 }
 
 export interface PaginatedUsersResponse {

@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, Routes, Route } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
+import { getUserRoleId } from '../types/user';
 
 // Eager load Login and Layout as they are critical path
 import Login from '../pages/auth/Login';
@@ -20,6 +21,7 @@ const LaporanRapat = lazy(() => import('../pages/laporan/LaporanRapat'));
 const LaporanDetail = lazy(() => import('../pages/laporan/LaporanDetail'));
 const BackupManagement = lazy(() => import('../pages/backups/BackupManagement'));
 const UbahLogo = lazy(() => import('../pages/settings/UbahLogo'));
+const Profile = lazy(() => import('../pages/profile/Profile'));
 
 /* ─── Role constants ─── */
 const ROLE_SUPER_ADMIN = 1;
@@ -34,14 +36,32 @@ const PageLoader = () => (
 );
 
 function ProtectedRoute() {
-  const { isAuthenticated } = useAuthStore();
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-  return <Outlet />;
+  const { isAuthenticated, isCheckingSession } = useAuthStore();
+  
+  if (isCheckingSession) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-body)' }}>
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 function RoleProtectedRoute({ allowedRoles }: { allowedRoles: number[] }) {
-  const { user } = useAuthStore();
-  if (!user || !allowedRoles.includes(user.role_id)) return <Navigate to="/dashboard" replace />;
+  const { user, isCheckingSession } = useAuthStore();
+
+  if (isCheckingSession) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-body)' }}>
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
+  const userRoleId = getUserRoleId(user);
+  if (!user || userRoleId === undefined || !allowedRoles.includes(userRoleId)) return <Navigate to="/dashboard" replace />;
   return <Outlet />;
 }
 
@@ -57,6 +77,7 @@ export default function AppRoutes() {
             <Route path="/meetings/create" element={<MeetingForm />} />
             <Route path="/meetings/:id" element={<MeetingDetail />} />
             <Route path="/meetings/:id/edit" element={<MeetingForm />} />
+            <Route path="/profile" element={<Profile />} />
 
             {/* Laporan – SuperAdmin + Sekretaris */}
             <Route element={<RoleProtectedRoute allowedRoles={[ROLE_SUPER_ADMIN, ROLE_SEKRETARIS]} />}>
