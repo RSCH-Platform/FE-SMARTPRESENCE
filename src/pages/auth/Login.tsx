@@ -321,6 +321,7 @@ const Login: React.FC = () => {
   const [quoteIndex, setQuoteIndex] = useState(() => Math.floor(Math.random() * QUOTES.length));
   const [isFading, setIsFading] = useState(false);
   const [checkingSSO, setCheckingSSO] = useState(true);
+  const [ssoData, setSsoData] = useState<{ enabled: boolean; url: string | null }>({ enabled: false, url: null });
 
   const navigate = useNavigate();
   const auth = useAuthStore();
@@ -332,12 +333,15 @@ const Login: React.FC = () => {
     return null;
   }
 
-  // Handle SSO Redirect
+  // Handle SSO Check
   useEffect(() => {
     const checkSSOMode = async () => {
       try {
         const data = await authService.getAuthMode();
         if (data.sso_enabled && data.sso_login_url) {
+          setSsoData({ enabled: true, url: data.sso_login_url });
+          // Optional: Auto redirect can still be here if desired, 
+          // but we show the UI explicitly in case it fails or is slow
           window.location.href = data.sso_login_url;
         } else {
           setCheckingSSO(false);
@@ -363,6 +367,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (ssoData.enabled) return; // Prevent submission if SSO is enabled
     setError(null);
     setIsLoading(true);
 
@@ -382,7 +387,7 @@ const Login: React.FC = () => {
     }
   };
 
-  if (checkingSSO) {
+  if (checkingSSO && !ssoData.enabled) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: 'var(--bg-body)' }}>
         <div className="spinner"></div>
@@ -409,53 +414,69 @@ const Login: React.FC = () => {
           </div>
         )}
 
-        <form className="login-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="nip">NIP</label>
-            <div className="input-wrapper">
-              <img src={userIcon} alt="user icon" className="input-icon" />
-              <input
-                type="text"
-                id="nip"
-                value={nip}
-                onChange={(e) => setNip(e.target.value)}
-                placeholder="Masukkan NIP"
-                required
-                disabled={isLoading}
-              />
-            </div>
+        {ssoData.enabled ? (
+          <div className="login-form">
+            <p style={{ textAlign: 'center', marginBottom: '20px', color: 'var(--text-secondary)' }}>
+              Login lokal dinonaktifkan. Silakan gunakan Single Sign-On.
+            </p>
+            <button 
+              type="button" 
+              className="login-btn" 
+              onClick={() => window.location.href = ssoData.url!}
+            >
+              <img src={masukIcon} alt="login icon" className="btn-icon" />
+              Masuk dengan SSO
+            </button>
           </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <div className="input-wrapper">
-              <img src={lockIcon} alt="lock icon" className="input-icon" />
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Masukkan password"
-                required
-                disabled={isLoading}
-              />
+        ) : (
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="nip">NIP</label>
+              <div className="input-wrapper">
+                <img src={userIcon} alt="user icon" className="input-icon" />
+                <input
+                  type="text"
+                  id="nip"
+                  value={nip}
+                  onChange={(e) => setNip(e.target.value)}
+                  placeholder="Masukkan NIP"
+                  required
+                  disabled={isLoading}
+                />
+              </div>
             </div>
-          </div>
 
-          <button type="submit" className="login-btn" disabled={isLoading}>
-            {isLoading ? (
-              <>
-                <span className="login-spinner"></span>
-                Memproses...
-              </>
-            ) : (
-              <>
-                <img src={masukIcon} alt="login icon" className="btn-icon" />
-                Masuk
-              </>
-            )}
-          </button>
-        </form>
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <div className="input-wrapper">
+                <img src={lockIcon} alt="lock icon" className="input-icon" />
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Masukkan password"
+                  required
+                  disabled={isLoading}
+                />
+              </div>
+            </div>
+
+            <button type="submit" className="login-btn" disabled={isLoading}>
+              {isLoading ? (
+                <>
+                  <span className="login-spinner"></span>
+                  Memproses...
+                </>
+              ) : (
+                <>
+                  <img src={masukIcon} alt="login icon" className="btn-icon" />
+                  Masuk
+                </>
+              )}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
