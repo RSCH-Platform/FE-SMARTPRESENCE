@@ -6,7 +6,6 @@ import { laporanService } from '../../services/laporanService';
 import { employeeService } from '../../services/employeeService';
 import type { Employee } from '../../types/employee';
 import { useAuthStore } from '../../store/authStore';
-import { getUserRoleId } from '../../types/user';
 import { useLogo } from '../../contexts/LogoContext';
 import './LaporanDetail.css';
 

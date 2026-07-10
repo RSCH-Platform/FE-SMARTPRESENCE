@@ -6,7 +6,6 @@ import {
   meetingRoomService,
 } from "../../services/meetingService";
 import { useAuthStore } from '../../store/authStore';
-import { getUserRoleId } from '../../types/user';
 import { useToast } from "../../contexts/ToastContext";
 import type {
   Meeting,

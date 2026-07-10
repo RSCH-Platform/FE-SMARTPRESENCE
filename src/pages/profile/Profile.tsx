@@ -4,7 +4,6 @@ import { userService } from '../../services/userService';
 import { employeeService } from '../../services/employeeService';
 import { useToast } from '../../contexts/ToastContext';
 import { type Employee } from '../../types/employee';
-import { getUserRoleId } from '../../types/user';
 import './Profile.css';
 
 export default function Profile() {

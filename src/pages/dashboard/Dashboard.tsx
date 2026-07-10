@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 import { useAuthStore } from '../../store/authStore';
-import { getUserRoleId } from '../../types/user';
 import DashboardSekretaris from './DashboardSekretaris';
 import './Dashboard.css';
 

@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import ActionIcon from '../../components/ui/ActionIcon';
 import { userService } from '../../services/userService';
 import type { User, Role, PaginatedUsersResponse, UserFormData } from '../../types/user';
-import { getUserRoleId } from '../../types/user';
 import { useToast } from '../../contexts/ToastContext';
 import './UserManagement.css';
 

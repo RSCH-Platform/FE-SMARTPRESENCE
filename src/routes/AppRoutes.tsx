@@ -1,7 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, Routes, Route } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { getUserRoleId } from '../types/user';
 
 // Eager load Login and Layout as they are critical path
 import Login from '../pages/auth/Login';

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import { getUserRoleId } from '../../types/user';
 import { authService } from '../../services/authService';
 import { useTheme } from '../../hooks/useTheme';
 import { useLogo } from '../../contexts/LogoContext';
