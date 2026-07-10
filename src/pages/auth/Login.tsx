@@ -340,9 +340,14 @@ const Login: React.FC = () => {
         const data = await authService.getAuthMode();
         if (data.sso_enabled && data.sso_login_url) {
           setSsoData({ enabled: true, url: data.sso_login_url });
-          // Optional: Auto redirect can still be here if desired, 
-          // but we show the UI explicitly in case it fails or is slow
-          window.location.href = data.sso_login_url;
+          
+          const params = new URLSearchParams(window.location.search);
+          if (params.get('error') === '401') {
+            setError('Sesi telah berakhir atau gagal divalidasi. Silakan login kembali melalui SSO.');
+            setCheckingSSO(false); // Stop loading spinner
+          } else {
+            window.location.href = data.sso_login_url;
+          }
         } else {
           setCheckingSSO(false);
         }

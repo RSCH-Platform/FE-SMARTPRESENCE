@@ -18,7 +18,7 @@ api.interceptors.response.use(
       localStorage.removeItem('auth_token');
       localStorage.removeItem('auth_user');
       if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
+        window.location.href = '/login?error=401';
       }
     }
     return Promise.reject(error);
