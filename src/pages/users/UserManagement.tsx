@@ -208,8 +208,8 @@ export default function UserManagement() {
               </thead>
               <tbody>
                 {users.data.map(u => {
-                  const userRole = getUserRoleId(u);
-                  const isSuperAdmin = userRole === 1;
+                  const roleString = u.roles?.[0]?.role || '';
+                  const isSuperAdmin = roleString === 'super_admin';
                   return (
                     <tr key={u.id}>
                       <td>

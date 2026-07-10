@@ -22,8 +22,8 @@ import iconBackup from '../../assets/icons/sidebar/Backup.svg';
 import iconKeluar from '../../assets/icons/sidebar/Keluar.webp';
 
 /* ─── Role constants ─── */
-const ROLE_SUPER_ADMIN = 1;
-const ROLE_SEKRETARIS = 3;
+const ROLE_SUPER_ADMIN = 'super_admin';
+const ROLE_SEKRETARIS = 'sekretaris';
 
 /*
  * Each menu item can have a `roles` array.
@@ -35,7 +35,7 @@ interface MenuItem {
   path: string;
   iconSrc?: string;
   iconNode?: React.ReactNode;
-  roles?: number[]; // undefined = visible to all
+  roles?: string[]; // undefined = visible to all
 }
 
 const menuItems: MenuItem[] = [
@@ -129,12 +129,12 @@ export default function Sidebar({ mobileOpen, onToggleMobile }: SidebarProps) {
   const { isDark, toggleTheme } = useTheme();
   const { logoKiriSidebar } = useLogo();
 
-  const userRoleId = getUserRoleId(user);
+  const roleString = user?.roles?.[0]?.role || '';
 
   // Filter menu items based on user's role
   const visibleMenuItems = menuItems.filter((item) => {
     if (!item.roles) return true; // no restriction → visible to all
-    return userRoleId !== undefined && item.roles.includes(userRoleId);
+    return roleString && item.roles.includes(roleString);
   });
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);

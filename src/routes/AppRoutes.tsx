@@ -24,8 +24,8 @@ const UbahLogo = lazy(() => import('../pages/settings/UbahLogo'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
 
 /* ─── Role constants ─── */
-const ROLE_SUPER_ADMIN = 1;
-const ROLE_SEKRETARIS = 3;
+const ROLE_SUPER_ADMIN = 'super_admin';
+const ROLE_SEKRETARIS = 'sekretaris';
 
 // Loading Fallback Component
 const PageLoader = () => (
@@ -49,7 +49,7 @@ function ProtectedRoute() {
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
-function RoleProtectedRoute({ allowedRoles }: { allowedRoles: number[] }) {
+function RoleProtectedRoute({ allowedRoles }: { allowedRoles: string[] }) {
   const { user, isCheckingSession } = useAuthStore();
 
   if (isCheckingSession) {
@@ -60,8 +60,8 @@ function RoleProtectedRoute({ allowedRoles }: { allowedRoles: number[] }) {
     );
   }
 
-  const userRoleId = getUserRoleId(user);
-  if (!user || userRoleId === undefined || !allowedRoles.includes(userRoleId)) return <Navigate to="/dashboard" replace />;
+  const roleString = user?.roles?.[0]?.role || '';
+  if (!user || !roleString || !allowedRoles.includes(roleString)) return <Navigate to="/dashboard" replace />;
   return <Outlet />;
 }
 

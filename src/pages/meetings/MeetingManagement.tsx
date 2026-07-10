@@ -15,7 +15,7 @@ import type {
 } from "../../types/meeting";
 import "./MeetingManagement.css";
 
-const ROLE_ADMIN = 2;
+const ROLE_ADMIN = 'admin';
 
 /* ─── Helpers ─── */
 function formatDate(d: string) {
@@ -44,7 +44,7 @@ function statusLabel(s: string) {
 export default function MeetingManagement() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const isAdmin = getUserRoleId(user) === ROLE_ADMIN;
+  const isAdmin = user?.roles?.[0]?.role === ROLE_ADMIN;
 
   /* state */
   const [meetings, setMeetings] = useState<PaginatedResponse<Meeting> | null>(

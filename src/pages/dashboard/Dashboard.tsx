@@ -120,8 +120,8 @@ import iconRapatSelesai from '../../assets/icons/dashboard/rapat selesai.webp';
 /* ─── Component ─── */
 export default function Dashboard() {
   const { user } = useAuthStore();
-  const userRoleId = getUserRoleId(user);
-  if (userRoleId === 3) return <DashboardSekretaris />;
+  const roleString = user?.roles?.[0]?.role || '';
+  if (roleString === 'sekretaris') return <DashboardSekretaris />;
 
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);

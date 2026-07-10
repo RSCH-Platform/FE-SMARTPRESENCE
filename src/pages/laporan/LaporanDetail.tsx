@@ -96,7 +96,7 @@ export default function LaporanDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const isSuperAdmin = getUserRoleId(user) === 1;
+  const isSuperAdmin = user?.roles?.[0]?.role === 'super_admin';
   const editorRef = useRef<any>(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<DetailData | null>(null);

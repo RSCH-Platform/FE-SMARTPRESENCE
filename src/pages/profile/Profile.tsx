@@ -113,9 +113,9 @@ export default function Profile() {
     }
   };
 
-  const userRoleId = getUserRoleId(user);
-  const roleName = userRoleId === 1 ? 'Super Admin' : userRoleId === 3 ? 'Sekretaris' : 'Karyawan';
-  const roleClass = userRoleId === 1 ? 'admin' : userRoleId === 3 ? 'sekretaris' : 'karyawan';
+  const roleString = user?.roles?.[0]?.role || '';
+  const roleName = roleString === 'super_admin' ? 'Super Admin' : roleString === 'sekretaris' ? 'Sekretaris' : 'Karyawan';
+  const roleClass = roleString === 'super_admin' ? 'admin' : roleString === 'sekretaris' ? 'sekretaris' : 'karyawan';
 
   return (
     <div className="profile-container">
