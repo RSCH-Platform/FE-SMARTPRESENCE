@@ -320,8 +320,11 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [quoteIndex, setQuoteIndex] = useState(() => Math.floor(Math.random() * QUOTES.length));
   const [isFading, setIsFading] = useState(false);
-  const [checkingSSO, setCheckingSSO] = useState(true);
-  const [ssoData, setSsoData] = useState<{ enabled: boolean; url: string | null }>({ enabled: false, url: null });
+  const [checkingSSO, setCheckingSSO] = useState(import.meta.env.VITE_USE_SSO === 'true');
+  const [ssoData] = useState<{ enabled: boolean; url: string | null }>({
+    enabled: import.meta.env.VITE_USE_SSO === 'true',
+    url: import.meta.env.VITE_SSO_URL || null
+  });
 
   const navigate = useNavigate();
   const auth = useAuthStore();
@@ -336,27 +339,20 @@ const Login: React.FC = () => {
   // Handle SSO Check
   useEffect(() => {
     const checkSSOMode = async () => {
-      try {
-        const data = await authService.getAuthMode();
-        if (data.sso_enabled && data.sso_login_url) {
-          setSsoData({ enabled: true, url: data.sso_login_url });
-          
-          const params = new URLSearchParams(window.location.search);
-          if (params.get('error') === '401') {
-            setError('Sesi telah berakhir atau gagal divalidasi. Silakan login kembali melalui SSO.');
-            setCheckingSSO(false); // Stop loading spinner
-          } else {
-            window.location.href = data.sso_login_url;
-          }
+      if (ssoData.enabled && ssoData.url) {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('error') === '401') {
+          setError('Sesi telah berakhir atau gagal divalidasi. Silakan login kembali melalui SSO.');
+          setCheckingSSO(false); // Stop loading spinner
         } else {
-          setCheckingSSO(false);
+          window.location.href = ssoData.url;
         }
-      } catch (err) {
+      } else {
         setCheckingSSO(false);
       }
     };
     checkSSOMode();
-  }, []);
+  }, [ssoData.enabled, ssoData.url]);
 
   // Rotate quotes every 6 seconds
   useEffect(() => {

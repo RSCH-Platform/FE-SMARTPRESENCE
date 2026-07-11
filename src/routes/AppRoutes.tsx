@@ -45,7 +45,15 @@ function ProtectedRoute() {
     );
   }
 
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  if (!isAuthenticated) {
+    if (import.meta.env.VITE_USE_SSO === 'true' && import.meta.env.VITE_SSO_URL) {
+      window.location.href = import.meta.env.VITE_SSO_URL;
+      return null;
+    }
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
 }
 
 function RoleProtectedRoute({ allowedRoles }: { allowedRoles: string[] }) {
