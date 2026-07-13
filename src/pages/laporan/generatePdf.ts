@@ -357,8 +357,8 @@ async function drawNotulenPages(doc: jsPDF, data: PdfExportData, logoL: string |
       </style>
     `;
     const sanitizedContent = data.notulensiContent
-      .replaceAll('http://localhost:9090/smsp', '/smsp')
-      .replaceAll('http://localhost:7200/storage', '/storage');
+      .replaceAll(import.meta.env.VITE_MINIO_URL + '/smsp', '/smsp')
+      .replaceAll(import.meta.env.VITE_API_URL + '/storage', '/storage');
     container.innerHTML = styleString + sanitizedContent;
     document.body.appendChild(container);
 

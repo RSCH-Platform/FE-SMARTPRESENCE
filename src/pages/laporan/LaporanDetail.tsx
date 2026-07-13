@@ -43,8 +43,8 @@ function fixUrl(url: string | null | undefined) {
 function sanitizeHtml(html: string | null | undefined) {
   if (!html) return '';
   return html
-    .replaceAll('http://localhost:9090/smsp', '/smsp')
-    .replaceAll('http://localhost:7200/storage', '/storage');
+    .replaceAll(import.meta.env.VITE_MINIO_URL + '/smsp', '/smsp')
+    .replaceAll(import.meta.env.VITE_API_URL + '/storage', '/storage');
 }
 
 /* Custom Searchable Select */
