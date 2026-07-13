@@ -12,8 +12,9 @@ export const authService = {
     return response.data;
   },
 
-  async logout(): Promise<void> {
-    await api.post('/logout');
+  async logout(): Promise<{ sso_logout_url?: string }> {
+    const response = await api.post('/logout');
+    return response.data;
   },
 
   async getAuthMode(): Promise<{ sso_enabled: boolean; sso_login_url: string | null }> {

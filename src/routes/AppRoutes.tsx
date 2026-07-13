@@ -46,7 +46,7 @@ function ProtectedRoute() {
   }
 
   if (!isAuthenticated) {
-    if (import.meta.env.VITE_USE_SSO === 'true' && import.meta.env.VITE_SSO_URL) {
+    if ([import.meta.env.VITE_USE_SSO].includes('true') && import.meta.env.VITE_SSO_URL) {
       window.location.href = import.meta.env.VITE_SSO_URL;
       return null;
     }

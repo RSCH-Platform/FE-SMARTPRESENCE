@@ -320,9 +320,9 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [quoteIndex, setQuoteIndex] = useState(() => Math.floor(Math.random() * QUOTES.length));
   const [isFading, setIsFading] = useState(false);
-  const [checkingSSO, setCheckingSSO] = useState(import.meta.env.VITE_USE_SSO === 'true');
+  const [checkingSSO, setCheckingSSO] = useState([import.meta.env.VITE_USE_SSO].includes('true'));
   const [ssoData] = useState<{ enabled: boolean; url: string | null }>({
-    enabled: import.meta.env.VITE_USE_SSO === 'true',
+    enabled: [import.meta.env.VITE_USE_SSO].includes('true'),
     url: import.meta.env.VITE_SSO_URL || null
   });
 
