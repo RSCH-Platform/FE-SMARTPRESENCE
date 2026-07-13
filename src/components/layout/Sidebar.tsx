@@ -140,14 +140,25 @@ export default function Sidebar({ mobileOpen, onToggleMobile }: SidebarProps) {
 
   const handleLogout = async () => {
     setLoggingOut(true);
+    let ssoLogoutUrl: string | undefined = undefined;
     try {
-      await authService.logout();
+      const res = await authService.logout();
+      ssoLogoutUrl = res?.sso_logout_url;
     } catch {
       // ignore
     }
-    logout();
+    
     setShowLogoutModal(false);
-    navigate('/login', { replace: true });
+    
+    if (ssoLogoutUrl) {
+      // Manual cleanup storage tanpa memicu re-render reaktif yang merusak alur redirect SSO
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_user');
+      window.location.href = ssoLogoutUrl;
+    } else {
+      logout();
+      navigate('/login', { replace: true });
+    }
   };
 
   const sidebarClass = `sidebar${mobileOpen ? ' mobile-open' : ''}`;
