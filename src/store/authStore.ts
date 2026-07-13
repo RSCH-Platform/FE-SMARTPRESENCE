@@ -8,6 +8,7 @@ export interface AuthState {
   isLoading: boolean;
   isCheckingSession: boolean;
   error: string | null;
+  networkError: boolean;
 }
 
 export interface AuthContextType extends AuthState {
@@ -15,6 +16,7 @@ export interface AuthContextType extends AuthState {
   logout: () => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setNetworkError: (error: boolean) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -48,5 +50,6 @@ export function getInitialAuthState(): AuthState {
     isLoading: false,
     isCheckingSession: true,
     error: null,
+    networkError: false,
   };
 }

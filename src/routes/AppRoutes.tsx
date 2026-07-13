@@ -21,6 +21,7 @@ const LaporanDetail = lazy(() => import('../pages/laporan/LaporanDetail'));
 const BackupManagement = lazy(() => import('../pages/backups/BackupManagement'));
 const UbahLogo = lazy(() => import('../pages/settings/UbahLogo'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
+const NetworkError = lazy(() => import('../pages/errors/NetworkError'));
 
 /* ─── Role constants ─── */
 const ROLE_SUPER_ADMIN = 'super_admin';
@@ -35,7 +36,7 @@ const PageLoader = () => (
 );
 
 function ProtectedRoute() {
-  const { isAuthenticated, isCheckingSession } = useAuthStore();
+  const { isAuthenticated, isCheckingSession, networkError } = useAuthStore();
   
   if (isCheckingSession) {
     return (
@@ -43,6 +44,10 @@ function ProtectedRoute() {
         <div className="spinner"></div>
       </div>
     );
+  }
+
+  if (networkError) {
+    return <NetworkError />;
   }
 
   if (!isAuthenticated) {

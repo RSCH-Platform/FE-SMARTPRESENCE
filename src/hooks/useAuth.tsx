@@ -40,9 +40,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setState((prev) => ({ ...prev, error }));
   }, []);
 
+  const setNetworkError = useCallback((error: boolean) => {
+    setState((prev) => ({ ...prev, networkError: error }));
+  }, []);
+
   const value = useMemo(
-    () => ({ ...state, login, logout, setLoading, setError }),
-    [state, login, logout, setLoading, setError],
+    () => ({ ...state, login, logout, setLoading, setError, setNetworkError }),
+    [state, login, logout, setLoading, setError, setNetworkError],
   );
 
   React.useEffect(() => {
@@ -56,13 +60,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           isAuthenticated: true,
           isCheckingSession: false,
         }));
-      } catch (err) {
+      } catch (err: any) {
+        const isNetworkError = !err.response && (err.code === 'ERR_NETWORK' || err.message === 'Network Error');
         setState((prev) => ({
           ...prev,
           user: null,
           token: null,
           isAuthenticated: false,
           isCheckingSession: false,
+          networkError: isNetworkError,
         }));
       }
     };
