@@ -22,6 +22,7 @@ const BackupManagement = lazy(() => import('../pages/backups/BackupManagement'))
 const UbahLogo = lazy(() => import('../pages/settings/UbahLogo'));
 const Profile = lazy(() => import('../pages/profile/Profile'));
 const NetworkError = lazy(() => import('../pages/errors/NetworkError'));
+const PageExpiredError = lazy(() => import('../pages/errors/PageExpiredError'));
 
 /* ─── Role constants ─── */
 const ROLE_SUPER_ADMIN = 'super_admin';
@@ -82,6 +83,7 @@ export default function AppRoutes() {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/419" element={<PageExpiredError />} />
         <Route element={<ProtectedRoute />}>
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />

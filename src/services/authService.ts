@@ -3,22 +3,22 @@ import type { LoginRequest, LoginResponse } from '../types/user';
 
 export const authService = {
   async login(data: LoginRequest): Promise<LoginResponse> {
-    const response = await api.post<LoginResponse>('/login', data);
+    const response = await api.post<LoginResponse>('login', data);
     return response.data;
   },
 
   async me(): Promise<{ user: any }> {
-    const response = await api.get('/auth/me');
+    const response = await api.get('auth/me');
     return response.data;
   },
 
   async logout(): Promise<{ sso_logout_url?: string }> {
-    const response = await api.post('/logout');
+    const response = await api.post('logout');
     return response.data;
   },
 
   async getAuthMode(): Promise<{ sso_enabled: boolean; sso_login_url: string | null }> {
-    const response = await api.get('/auth/mode');
+    const response = await api.get('auth/mode');
     return response.data;
   },
 

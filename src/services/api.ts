@@ -3,6 +3,7 @@ import axios from 'axios';
 const api = axios.create({
   baseURL: (import.meta.env.VITE_API_URL || '') + '/api',
   withCredentials: true,
+  withXSRFToken: true,
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -19,6 +20,10 @@ api.interceptors.response.use(
       localStorage.removeItem('auth_user');
       if (window.location.pathname !== '/login') {
         window.location.href = '/login?error=401';
+      }
+    } else if (error.response?.status === 419) {
+      if (window.location.pathname !== '/419') {
+        window.location.href = '/419';
       }
     }
     return Promise.reject(error);
