@@ -10,6 +10,15 @@ const api = axios.create({
   },
 });
 
+// Request interceptor: add Bearer token
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('auth_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Response interceptor: handle 401
 api.interceptors.response.use(
   (response) => response,
